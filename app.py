@@ -123,10 +123,15 @@ def ver_cursos_matriculados(estudiante):
     os.system ("cls")
     if not estudiante.mi_cursos:
         print("No estás matriculado en ningún curso aún.")
+        pause()
+        menu_alumno(estudiante)
+        
     else:
         print("\n*** Cursos Matriculados ***")
         for i, curso in enumerate(estudiante.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}")
+        pause()
+        return
 
 
 def matricularse_a_curso(estudiante):
@@ -175,6 +180,8 @@ def ingresar_como_profesor(email):
         profesor.alta_profesor(email)
     else:
         print("Operacion cancelada.")
+        pause()
+        return
 
 def dictar_curso(profesor):
     os.system ("cls")
@@ -190,10 +197,13 @@ def ver_cursos_dictados(profesor):
     os.system ("cls")
     if not profesor.mi_cursos:
         print("No dictas ningún curso aún.")
+        pause()
     else:
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
+        pause()
+
 
 def alta_profesor(mail:str):
     os.system ("cls")
