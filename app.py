@@ -1,6 +1,8 @@
 from curso import *
 from estudiante import *
 from profesor import *
+import msvcrt
+import os
 
 menucito = '''
 \n *** Menu Principal ***
@@ -10,6 +12,7 @@ menucito = '''
 4 - Salir
 '''
 def menu_principal():
+    os.system ("cls")
     while True:
         print(menucito)
         
@@ -25,13 +28,16 @@ def menu_principal():
             informes()
         elif opcion == "4":
             print("Saliendo del sistema. ¡Hasta luego!")
+            pause()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
+            pause()
 
 
 def menu_alumno(estudiante):
     while True:
+        os.system ("cls")
         print(f"\n*** Menú Alumno - Bienvenido {estudiante.nombre} {estudiante.apellido} ***")
         print("1 - Matricularse a un curso")
         print("2 - Ver cursos matriculados")
@@ -45,12 +51,15 @@ def menu_alumno(estudiante):
             ver_cursos_matriculados(estudiante)
         elif opcion == "3":
             print("Volviendo al menú principal.")
+            pause()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
+            pause()
 
 def menu_profesor(profesor):
     while True:
+        os.system ("cls")
         print(f"\n*** Menú Profesor - Bienvenido {profesor.nombre} {profesor.apellido} ***")
         print("1 - Dictar curso")
         print("2 - Ver cursos dictados")
@@ -62,14 +71,17 @@ def menu_profesor(profesor):
             ver_cursos_dictados(profesor)
         elif opcion == "3":
             print("Volviendo al menú principal.")
+            pause()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
+            pause()
 
 
 
 def informes():
     while True:
+        os.system ("cls")
         print("\n*** Informes ***")
         print("1 - Listado de cursos")
         print("2 - Listado de alumnos")
@@ -85,9 +97,11 @@ def informes():
             ver_profesores()
         elif opcion == "4":
             print("Volviendo al menú principal.")
+            pause()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
+            pause()
 
 #funcion para ingresar como alumno, pide mail, si no existe permite dar de alta un nuevo alumno
 def ingresar_como_alumno(email): 
@@ -166,6 +180,7 @@ def dictar_curso(profesor):
     lista_cursos.append(curso)
     profesor.mi_cursos.append(curso)
     print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}")
+    pause()
 
 def ver_cursos_dictados(profesor):
     if not profesor.mi_cursos:
@@ -174,6 +189,7 @@ def ver_cursos_dictados(profesor):
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
+            pause()
 
 def alta_profesor(mail:str):
     nombre = input("Ingrese el nombre: ")
@@ -209,4 +225,8 @@ def ver_profesores():
     for profesor in lista_profesores_ordenados:
         print(profesor)
 
+def pause():
+    print("Presione cualquier tecla para continuar...")
+    msvcrt.getch().strip()    
+    
 menu_principal()
