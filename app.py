@@ -41,7 +41,8 @@ def menu_alumno(estudiante):
         print(f"\n*** Menú Alumno - Bienvenido {estudiante.nombre} {estudiante.apellido} ***")
         print("1 - Matricularse a un curso")
         print("2 - Ver cursos matriculados")
-        print("3 - Volver al menú principal")
+        print("3 - Desmatricularse de un curso")
+        print("4 - Volver al menú principal")
 
         opcion = input("Ingrese su opción: ")
 
@@ -50,6 +51,8 @@ def menu_alumno(estudiante):
         elif opcion == "2":
             ver_cursos_matriculados(estudiante)
         elif opcion == "3":
+            desmatricularse_a_curso(estudiante)
+        elif opcion == "4":
             print("Volviendo al menú principal.")
             pause()
             break
@@ -152,6 +155,23 @@ def matricularse_a_curso(estudiante):
             print("Opción inválida. Por favor, ingrese una opción válida.")
     else:
         print("Opción inválida. Por favor, ingrese un número válido.")
+
+def desmatricularse_a_curso(estudiante):
+    os.system("cls")
+    lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
+    ver_cursos(lista_cursos)
+    opcion = input("Seleccione el número del curso al que desea matricularse: ")
+    if opcion.isdigit():
+        curso_index = int(opcion) - 1
+        if 0 <= curso_index < len(lista_cursos_ordenados):
+            curso = lista_cursos_ordenados[curso_index]
+            mensaje = estudiante.desmatricularse_al_curso(curso)
+            print(mensaje)
+        else:
+            print("Opción inválida. Por favor, ingrese una opción válida.")
+    else:
+        print("Opción inválida. Por favor, ingrese un número válido.")
+
 
 def alta_alumno(mail:str):
     os.system ("cls")

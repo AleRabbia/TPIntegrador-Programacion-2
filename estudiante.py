@@ -34,18 +34,26 @@ class Estudiante(Usuario):
     def __str__(self) -> str:
         return f"Alumno: {self.nombre} {self.apellido}, Legajo: {self.legajo}, Año de inscripcion: {self.anio_inscripcion_carrera}"
 
-    def matricularse_al_curso(self, curso: Curso, contrasenia: str) -> bool:
+    def matricularse_al_curso(self, curso: Curso, contrasenia: str) -> str:
 
-        if contrasenia == curso.contrasenia_matriculacion:
-                if curso not in self.__mi_cursos:
-                    self.__mi_cursos.append(curso)
-                    mensaje = f"Matriculado con éxito en el curso {curso.nombre}!"                    
-                else:
-                    mensaje = f"Ya estás matriculado en el curso {curso.nombre}."                    
+        if curso not in self.__mi_cursos:
+            if contrasenia == curso.contrasenia_matriculacion:
+                self.__mi_cursos.append(curso)
+                mensaje = f"Matriculado con éxito en el curso {curso.nombre}"
+            else:
+                mensaje = f"Contraseña incorrecta. Matriculación fallida."
         else:
-            mensaje ="Contraseña incorrecta. Matriculación fallida."
+            mensaje = f"Ya estás matriculado en el curso {curso.nombre}"
         return mensaje
     
+    def desmatricularse_al_curso(self, curso: Curso) -> str:
+
+        if curso not in self.__mi_cursos:
+            mensaje = f"No estás matriculado en el curso {curso.nombre}"
+        else:
+            self.__mi_cursos.remove(curso)
+            mensaje = f"Te desmatriculaste del curso {curso.nombre}"
+        return mensaje
 
         
 # Crear instancias de estudiantes
