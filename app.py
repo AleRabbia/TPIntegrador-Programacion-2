@@ -36,8 +36,8 @@ def menu_principal():
 
 
 def menu_alumno(estudiante):
+    os.system ("cls")
     while True:
-        os.system ("cls")
         print(f"\n*** Menú Alumno - Bienvenido {estudiante.nombre} {estudiante.apellido} ***")
         print("1 - Matricularse a un curso")
         print("2 - Ver cursos matriculados")
@@ -58,8 +58,8 @@ def menu_alumno(estudiante):
             pause()
 
 def menu_profesor(profesor):
+    os.system ("cls")
     while True:
-        os.system ("cls")
         print(f"\n*** Menú Profesor - Bienvenido {profesor.nombre} {profesor.apellido} ***")
         print("1 - Dictar curso")
         print("2 - Ver cursos dictados")
@@ -80,8 +80,8 @@ def menu_profesor(profesor):
 
 
 def informes():
+    os.system ("cls")
     while True:
-        os.system ("cls")
         print("\n*** Informes ***")
         print("1 - Listado de cursos")
         print("2 - Listado de alumnos")
@@ -97,14 +97,13 @@ def informes():
             ver_profesores()
         elif opcion == "4":
             print("Volviendo al menú principal.")
-            pause()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
-            pause()
 
 #funcion para ingresar como alumno, pide mail, si no existe permite dar de alta un nuevo alumno
 def ingresar_como_alumno(email): 
+    os.system ("cls")
     for estudiante in lista_estudiantes:
         if estudiante.mail == email:
             password = input("Ingrese su contraseña: ")
@@ -121,6 +120,7 @@ def ingresar_como_alumno(email):
         print("Operacion cancelada.")
 
 def ver_cursos_matriculados(estudiante):
+    os.system ("cls")
     if not estudiante.mi_cursos:
         print("No estás matriculado en ningún curso aún.")
     else:
@@ -130,6 +130,7 @@ def ver_cursos_matriculados(estudiante):
 
 
 def matricularse_a_curso(estudiante):
+    os.system ("cls")
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
     ver_cursos(lista_cursos)
     #ver_cursos()
@@ -148,6 +149,7 @@ def matricularse_a_curso(estudiante):
         print("Opción inválida. Por favor, ingrese un número válido.")
 
 def alta_alumno(mail:str):
+    os.system ("cls")
     nombre = input("Ingrese el nombre: ")
     apellido = input("Ingrese el apellido: ")
     legajo = input("Ingrese el numero de legajo: ")
@@ -158,6 +160,7 @@ def alta_alumno(mail:str):
     lista_estudiantes.append(nuevo_estudiante)
 
 def ingresar_como_profesor(email):
+    os.system ("cls")
     for profesor in lista_profesores:
         if profesor.mail == email:
             password = input("Ingrese su contraseña: ")
@@ -174,6 +177,7 @@ def ingresar_como_profesor(email):
         print("Operacion cancelada.")
 
 def dictar_curso(profesor):
+    os.system ("cls")
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
     contrasenia_matriculacion = Curso.generar_password(nombre_curso)
     curso = Curso(nombre_curso, contrasenia_matriculacion)
@@ -183,15 +187,16 @@ def dictar_curso(profesor):
     pause()
 
 def ver_cursos_dictados(profesor):
+    os.system ("cls")
     if not profesor.mi_cursos:
         print("No dictas ningún curso aún.")
     else:
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
-            pause()
 
 def alta_profesor(mail:str):
+    os.system ("cls")
     nombre = input("Ingrese el nombre: ")
     apellido = input("Ingrese el apellido: ")
     titulo = input("Ingrese el titulo: ")
@@ -202,29 +207,35 @@ def alta_profesor(mail:str):
  
 
 def ver_cursos(lista_cursos):
+    os.system ("cls")
     print("\n*** Cursos Disponibles ***")
 
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
     for i, curso in enumerate(lista_cursos_ordenados, start=1):
         print(f"{i} -", curso)
+    pause()
     #return lista_cursos_ordenados
 
 def ver_alumnos():
+    os.system ("cls")
     # Ordenar la lista de estudiantes por apellido
     lista_estudiantes_ordenados = sorted(lista_estudiantes, key=lambda estudiante: estudiante.apellido)
     print("\n*** Todos los Alumnos ***")
     # Imprimir la lista ordenada
     for estudiante in lista_estudiantes_ordenados:
         print(estudiante)
+    pause()
 
 def ver_profesores():
+    os.system ("cls")
     # Ordenar la lista de profesores por apellido
     lista_profesores_ordenados = sorted(lista_profesores, key=lambda profesor: profesor.apellido)
     print("\n*** Todos los Profesor ***")
     # Imprimir la lista ordenada
     for profesor in lista_profesores_ordenados:
         print(profesor)
-
+    pause()    
+        
 def pause():
     print("Presione cualquier tecla para continuar...")
     msvcrt.getch().strip()    
