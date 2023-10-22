@@ -174,7 +174,7 @@ def matricularse_a_curso(estudiante):
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
     else:
-        print("Opción inválida. Por favor, ingrese un número válido.")
+        print("Opción inválida. Por favor, ingrese un valor numérico.")
 
 def desmatricularse_a_curso(estudiante):
     os.system("cls")
@@ -195,9 +195,28 @@ def desmatricularse_a_curso(estudiante):
 
 def alta_alumno(mail:str):
     os.system ("cls")
-    nombre = input("Ingrese el nombre: ")
-    apellido = input("Ingrese el apellido: ")
-    legajo = input("Ingrese el numero de legajo: ")
+    while True:
+        nombre = input("Ingrese el nombre: ")
+        if validar_texto(nombre):
+            break
+        else:
+            print('Ingrese un formato válido para el nombre')
+            continue
+    while True:
+        apellido = input("Ingrese el apellido: ")
+        if validar_texto(apellido):
+            break
+        else:
+            print('Ingrese un formato válido para el nombre')
+            continue
+    while True:
+        leg = input("Ingrese el numero de legajo: ")
+        try:
+            legajo = int(leg)
+            break
+        except ValueError:
+            print("El legajo debe ser un número entero")
+            continue
     password = getpass.getpass("Ingrese su contraseña: ")
     if not nombre or not apellido or not legajo or not password:
         print("Todos los campos deben estar completos. Operación cancelada.")
@@ -227,10 +246,22 @@ def editar_usuario(user):
         opcion = input("Seleccione el número de la opción que desea realizar: ")
 
         if opcion == "1":
-            nuevo_nombre = input("Ingrese el nuevo nombre: ")
+            while True:
+                nuevo_nombre = input("Ingrese el nuevo nombre: ")
+                if validar_texto(nuevo_nombre):
+                    break
+                else:
+                    print('Ingrese un formato válido para el nombre')
+                    continue
             nuevos_datos["nombre"] = nuevo_nombre
         elif opcion == "2":
-            nuevo_apellido = input("Ingrese el nuevo apellido: ")
+            while True:
+                nuevo_apellido = input("Ingrese el nuevo apellido: ")
+                if validar_texto(nuevo_apellido):
+                    break
+                else:
+                    print('Ingrese un formato válido para el nombre')
+                    continue
             nuevos_datos["apellido"] = nuevo_apellido
         elif opcion == "3":
             cambiar_contraseña(user)
@@ -322,10 +353,35 @@ def ver_cursos_dictados(profesor):
 
 def alta_profesor(mail:str):
     os.system ("cls")
-    nombre = input("Ingrese el nombre: ")
-    apellido = input("Ingrese el apellido: ")
-    titulo = input("Ingrese el titulo: ")
-    anio_egreso = int(input("Ingrese el año de egreso: "))
+    while True:
+        nombre = input("Ingrese el nombre: ")
+        if validar_texto(nombre):
+            break
+        else:
+            print('Ingrese un formato válido para el nombre')
+            continue
+    while True:
+        apellido = input("Ingrese el apellido: ")
+        if validar_texto(apellido):
+            break
+        else:
+            print('Ingrese un formato válido para el nombre')
+            continue
+    while True:
+        titulo = input("Ingrese el titulo: ")
+        if validar_texto(titulo):
+            break
+        else:
+            print('Ingrese un formato válido para el nombre')
+            continue
+    while True:
+        anio = input("Ingrese el año de egreso: ")
+        try:
+            anio_egreso = int(anio)
+            break
+        except ValueError:
+            print("El legajo debe ser un número entero")
+            continue
     password = getpass.getpass("Ingrese la contraseña: ")
     if not nombre or not apellido or not titulo or not anio_egreso or not password:
         print("Todos los campos deben estar completos. Operación cancelada.")
@@ -383,5 +439,15 @@ def validar_email(email):
         return True
     else:
         return False
+
+def validar_texto(nombre):
+
+    patron_nombre = "^[A-Za-z\s-]+$"
+
+    if re.match(patron_nombre, nombre):
+        return True
+    else:
+        return False
+
 
 menu_principal()
