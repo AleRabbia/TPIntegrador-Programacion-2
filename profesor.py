@@ -15,11 +15,11 @@ class Profesor(Usuario):
 
     @property
     def titulo(self) -> str:
-        return self.__titulo
+        return self.__titulo.title()
 
     @titulo.setter
     def titulo(self, nuevo_titulo: str):
-        self.__titulo = nuevo_titulo
+        self.__titulo = nuevo_titulo.title()
 
     @property
     def anio_egreso(self) -> int:
@@ -35,6 +35,16 @@ class Profesor(Usuario):
     def dictar_curso(self, curso: Curso) -> None:
         print(f"El profesor {self.nombre} está dictando el curso: {curso.nombre}")
    
+    def resumen_profesor(self):
+
+        resumen = f"Resumen del Profesor: {self.nombre} {self.apellido}\n"
+        resumen += "*" * 50 + "\n"
+        resumen += f"Nombre: {self.nombre}\n"
+        resumen += f"Apellido: {self.apellido}\n"
+        resumen += f"Titulo: {self.titulo}\n"
+        resumen += f"Año de Egreso: {self.anio_egreso}\n"
+        resumen += "*" * 50
+        return resumen
     
 # Crear instancias de profesores
 profesor1 = Profesor("Pedro", "Lopez", "pedro@g.com", "pedro123", "Doctor", 2008)

@@ -3,6 +3,7 @@ from estudiante import *
 from profesor import *
 import msvcrt
 import os
+import getpass
 
 menucito = '''
 \n *** Menu Principal ***
@@ -42,7 +43,9 @@ def menu_alumno(estudiante):
         print("1 - Matricularse a un curso")
         print("2 - Ver cursos matriculados")
         print("3 - Desmatricularse de un curso")
-        print("4 - Volver al menú principal")
+        print("4 - Perfil del alumno")
+        print("5 - Editar mis datos")
+        print("6 - Volver al menú principal")
 
         opcion = input("Ingrese su opción: ")
 
@@ -53,6 +56,11 @@ def menu_alumno(estudiante):
         elif opcion == "3":
             desmatricularse_a_curso(estudiante)
         elif opcion == "4":
+            resumen = estudiante.resumen_alumno()
+            print(resumen)
+        elif opcion == "5":
+            editar_usuario(estudiante)
+        elif opcion == "6":
             print("Volviendo al menú principal.")
             pause()
             break
@@ -66,13 +74,20 @@ def menu_profesor(profesor):
         print(f"\n*** Menú Profesor - Bienvenido {profesor.nombre} {profesor.apellido} ***")
         print("1 - Dictar curso")
         print("2 - Ver cursos dictados")
-        print("3 - Volver al menú principal")
+        print("3 - Ver perfil profesor")
+        print("4 - Editar mis datos")
+        print("5 - Volver al menú principal")
         opcion = input("Ingrese su opción: ")
         if opcion == "1":
             dictar_curso(profesor)
         elif opcion == "2":
             ver_cursos_dictados(profesor)
         elif opcion == "3":
+            resumen = profesor.resumen_profesor()
+            print(resumen)
+        elif opcion == "4":
+            editar_usuario(profesor)
+        elif opcion == "5":
             print("Volviendo al menú principal.")
             pause()
             break
@@ -109,7 +124,7 @@ def ingresar_como_alumno(email):
     os.system ("cls")
     for estudiante in lista_estudiantes:
         if estudiante.mail == email:
-            password = input("Ingrese su contraseña: ")
+            password = getpass.getpass("Ingrese su contraseña: ")
             if Usuario.validar_credenciales(email, password):
                 menu_alumno(estudiante)
                 return
@@ -136,7 +151,6 @@ def ver_cursos_matriculados(estudiante):
         pause()
         return
 
-
 def matricularse_a_curso(estudiante):
     os.system ("cls")
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
@@ -149,8 +163,7 @@ def matricularse_a_curso(estudiante):
             curso = lista_cursos_ordenados[curso_index]
             contrasenia = input(f"Ingrese la contraseña de matriculación para el curso {curso.nombre}: ")
             mensaje = estudiante.matricularse_al_curso(curso, contrasenia)  #          
-            print(mensaje)
-            #estudiante.matricularse_al_curso(curso,contrasenia)            
+            print(mensaje)       
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
     else:
@@ -178,17 +191,77 @@ def alta_alumno(mail:str):
     nombre = input("Ingrese el nombre: ")
     apellido = input("Ingrese el apellido: ")
     legajo = input("Ingrese el numero de legajo: ")
-    password = input("Ingrese la contraseña: ")
+    password = getpass.getpass("Ingrese su contraseña: ")
     fecha_actual = datetime.datetime.now()
     fecha_inscripcion = fecha_actual.year
-    nuevo_estudiante = Estudiante(nombre, apellido, mail, password, legajo, fecha_inscripcion)
-    lista_estudiantes.append(nuevo_estudiante)
+    confirmacion = input("¿Confirma el alta de usuario? (si/no): ").lower()
+    if confirmacion == "si":
+        nuevo_estudiante = Estudiante(nombre, apellido, mail, password, legajo, fecha_inscripcion)
+        lista_estudiantes.append(nuevo_estudiante)
+        resumen = nuevo_estudiante.resumen_alumno()
+        print(resumen)
+    else:
+        print("Operación cancelada.")
+
+def editar_usuario(user):
+    nuevos_datos = {"nombre": user.nombre, "apellido": user.apellido}
+
+    while True:
+        print(f"\n*** Editar Datos del Usuario - {user.nombre} {user.apellido} ***")
+        print("1 - Editar Nombre")
+        print("2 - Editar Apellido")
+        print("3 - Editar Contraseña")
+        print("4 - Confirmar y Guardar Cambios")
+        print("5 - Volver al menú anterior")
+
+        opcion = input("Seleccione el número de la opción que desea realizar: ")
+
+        if opcion == "1":
+            nuevo_nombre = input("Ingrese el nuevo nombre: ")
+            nuevos_datos["nombre"] = nuevo_nombre
+        elif opcion == "2":
+            nuevo_apellido = input("Ingrese el nuevo apellido: ")
+            nuevos_datos["apellido"] = nuevo_apellido
+        elif opcion == "3":
+            cambiar_contraseña(user)
+        elif opcion == "4":
+            if nuevos_datos != {"nombre": user.nombre, "apellido": user.apellido}:
+                user.nombre = nuevos_datos["nombre"]
+                user.apellido = nuevos_datos["apellido"]
+                for usuario in Usuario.usuarios_registrados:
+                    if usuario["mail"] == user.mail:
+                        usuario["nombre"] = nuevos_datos["nombre"]
+                        usuario["apellido"] = nuevos_datos["apellido"]
+                print("Cambios guardados con éxito.")
+            else:
+                print("No se realizaron cambios.")
+        elif opcion == "5":
+            print("Volviendo al menú anterior.")
+            break
+        else:
+            print("Opción inválida. Por favor, ingrese un número válido.")
+
+
+
+def cambiar_contraseña(user):
+    #os.system("cls")
+    
+    contraseña_actual = getpass.getpass("Ingrese su contraseña actual: ")
+    if contraseña_actual == user.password:
+        nueva_contraseña = getpass.getpass("Ingrese la nueva contraseña: ")
+        user.password = nueva_contraseña
+        for usuario in Usuario.usuarios_registrados:
+            if usuario["mail"] == user.mail:
+                usuario["password"] = nueva_contraseña
+        print("Contraseña actualizada con éxito.")
+    else:
+        print("Contraseña incorrecta. No se realizaron cambios.")
 
 def ingresar_como_profesor(email):
     os.system ("cls")
     for profesor in lista_profesores:
         if profesor.mail == email:
-            password = input("Ingrese su contraseña: ")
+            password = getpass.getpass("Ingrese su contraseña: ")
             if Usuario.validar_credenciales(email, password):
                 menu_profesor(profesor)
                 return
@@ -197,7 +270,7 @@ def ingresar_como_profesor(email):
                 return
     confirmacion = input("No se encontró un profesor con ese email. ¿Desea darlo de alta en alumnado? (si/no): ").lower()
     if confirmacion == "si":
-        profesor.alta_profesor(email)
+        alta_profesor(email)
     else:
         print("Operacion cancelada.")
         pause()
@@ -207,11 +280,15 @@ def dictar_curso(profesor):
     os.system ("cls")
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
     contrasenia_matriculacion = Curso.generar_password(nombre_curso)
-    curso = Curso(nombre_curso, contrasenia_matriculacion)
-    lista_cursos.append(curso)
-    profesor.mi_cursos.append(curso)
-    print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}")
-    pause()
+    confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
+    if confirmacion == "si":
+        curso = Curso(nombre_curso, contrasenia_matriculacion)
+        lista_cursos.append(curso)
+        profesor.mi_cursos.append(curso)
+        print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}")
+        pause()
+    else:
+        print("Se canceló la operación.")
 
 def ver_cursos_dictados(profesor):
     os.system ("cls")
@@ -230,10 +307,17 @@ def alta_profesor(mail:str):
     nombre = input("Ingrese el nombre: ")
     apellido = input("Ingrese el apellido: ")
     titulo = input("Ingrese el titulo: ")
-    password = input("Ingrese la contraseña: ")
     anio_egreso = int(input("Ingrese el año de egreso: "))
-    nuevo_profe = Profesor(nombre, apellido, mail, password, titulo, anio_egreso)
-    lista_profesores.append(nuevo_profe)
+    password = getpass.getpass("Ingrese la contraseña: ")
+    confirmacion = input("¿Confirma el alta de usuario? (si/no): ").lower()
+    if confirmacion == "si":
+        nuevo_profe = Profesor(nombre, apellido, mail, password, titulo, anio_egreso)
+        lista_profesores.append(nuevo_profe)
+        resumen = nuevo_profe.resumen_profesor()
+        print(resumen)
+    else:
+        print("Operación cancelada.")
+    
  
 
 def ver_cursos(lista_cursos):

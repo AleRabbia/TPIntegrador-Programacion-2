@@ -6,11 +6,11 @@ class Curso:
 
     @property
     def nombre(self):
-        return self.__nombre
+        return self.__nombre.title()
     
     @nombre.setter
     def nombre(self, nuevo_nombre:str):
-        self.__nombre = nuevo_nombre
+        self.__nombre = nuevo_nombre.title()
 
     @property
     def contrasenia_matriculacion(self):

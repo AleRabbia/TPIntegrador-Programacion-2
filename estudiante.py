@@ -54,6 +54,18 @@ class Estudiante(Usuario):
             self.__mi_cursos.remove(curso)
             mensaje = f"Te desmatriculaste del curso {curso.nombre}"
         return mensaje
+    
+    def resumen_alumno(self):
+
+        resumen = f"Resumen del Alumno: {self.nombre} {self.apellido}\n"
+        resumen += "*" * 50 + "\n"
+        resumen += f"Nombre: {self.nombre}\n"
+        resumen += f"Apellido: {self.apellido}\n"
+        resumen += f"Legajo: {self.legajo}\n"
+        resumen += f"Año de Inscripción: {self.anio_inscripcion_carrera}\n"
+        resumen += "*" * 50
+        return resumen
+
 
         
 # Crear instancias de estudiantes

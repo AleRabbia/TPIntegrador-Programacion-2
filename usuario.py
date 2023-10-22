@@ -14,7 +14,7 @@ class Usuario(ABC):
 
     @nombre.setter
     def nombre(self, nuevo_nombre: str):
-        self.__nombre = nuevo_nombre
+        self.__nombre = nuevo_nombre.title()
 
     @property
     def apellido(self) -> str:
@@ -22,7 +22,7 @@ class Usuario(ABC):
 
     @apellido.setter
     def apellido(self, nuevo_apellido: str):
-        self.__apellido = nuevo_apellido
+        self.__apellido = nuevo_apellido.title()
 
     @property
     def mail(self) -> str:
