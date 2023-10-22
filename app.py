@@ -4,6 +4,7 @@ from profesor import *
 import msvcrt
 import os
 import getpass
+import re
 
 menucito = '''
 \n *** Menu Principal ***
@@ -20,11 +21,17 @@ def menu_principal():
         opcion = input("Ingrese su opción: ")
 
         if opcion == "1":
-            email = input("Ingrese su email: ")            
-            ingresar_como_alumno(email)
+            email = input("Ingrese su email: ")  
+            if email and validar_email(email):
+                ingresar_como_alumno(email)
+            else:
+                print("Correo inválido. Por favor, ingrese un correo válido.")
         elif opcion == "2":
-            email = input("Ingrese su email: ")            
-            ingresar_como_profesor(email)
+            email = input("Ingrese su email: ") 
+            if email and validar_email(email):           
+                ingresar_como_profesor(email)
+            else:
+                print("Correo inválido. Por favor, ingrese un correo válido.")
         elif opcion == "3":
             informes()
         elif opcion == "4":
@@ -192,6 +199,9 @@ def alta_alumno(mail:str):
     apellido = input("Ingrese el apellido: ")
     legajo = input("Ingrese el numero de legajo: ")
     password = getpass.getpass("Ingrese su contraseña: ")
+    if not nombre or not apellido or not legajo or not password:
+        print("Todos los campos deben estar completos. Operación cancelada.")
+        return
     fecha_actual = datetime.datetime.now()
     fecha_inscripcion = fecha_actual.year
     confirmacion = input("¿Confirma el alta de usuario? (si/no): ").lower()
@@ -225,16 +235,19 @@ def editar_usuario(user):
         elif opcion == "3":
             cambiar_contraseña(user)
         elif opcion == "4":
-            if nuevos_datos != {"nombre": user.nombre, "apellido": user.apellido}:
-                user.nombre = nuevos_datos["nombre"]
-                user.apellido = nuevos_datos["apellido"]
-                for usuario in Usuario.usuarios_registrados:
-                    if usuario["mail"] == user.mail:
-                        usuario["nombre"] = nuevos_datos["nombre"]
-                        usuario["apellido"] = nuevos_datos["apellido"]
-                print("Cambios guardados con éxito.")
+            if not nuevos_datos["nombre"] or not nuevos_datos["apellido"]:
+                print("Todos los campos deben estar completos. No se realizaron cambios.")
             else:
-                print("No se realizaron cambios.")
+                if nuevos_datos != {"nombre": user.nombre, "apellido": user.apellido}:
+                    user.nombre = nuevos_datos["nombre"]
+                    user.apellido = nuevos_datos["apellido"]
+                    for usuario in Usuario.usuarios_registrados:
+                        if usuario["mail"] == user.mail:
+                            usuario["nombre"] = nuevos_datos["nombre"]
+                            usuario["apellido"] = nuevos_datos["apellido"]
+                    print("Cambios guardados con éxito.")
+                else:
+                    print("No se realizaron cambios.")
         elif opcion == "5":
             print("Volviendo al menú anterior.")
             break
@@ -249,11 +262,16 @@ def cambiar_contraseña(user):
     contraseña_actual = getpass.getpass("Ingrese su contraseña actual: ")
     if contraseña_actual == user.password:
         nueva_contraseña = getpass.getpass("Ingrese la nueva contraseña: ")
-        user.password = nueva_contraseña
-        for usuario in Usuario.usuarios_registrados:
-            if usuario["mail"] == user.mail:
-                usuario["password"] = nueva_contraseña
-        print("Contraseña actualizada con éxito.")
+        if nueva_contraseña == user.password:
+            print("Debe ingresar una constraseña diferente. Operación cancelada.")
+        elif nueva_contraseña:
+            user.password = nueva_contraseña
+            for usuario in Usuario.usuarios_registrados:
+                if usuario["mail"] == user.mail:
+                    usuario["password"] = nueva_contraseña
+            print("Contraseña actualizada con éxito.")        
+        else:
+            print("La contraseña no puede ser vacía. Operación cancelada.")
     else:
         print("Contraseña incorrecta. No se realizaron cambios.")
 
@@ -309,6 +327,9 @@ def alta_profesor(mail:str):
     titulo = input("Ingrese el titulo: ")
     anio_egreso = int(input("Ingrese el año de egreso: "))
     password = getpass.getpass("Ingrese la contraseña: ")
+    if not nombre or not apellido or not titulo or not anio_egreso or not password:
+        print("Todos los campos deben estar completos. Operación cancelada.")
+        return
     confirmacion = input("¿Confirma el alta de usuario? (si/no): ").lower()
     if confirmacion == "si":
         nuevo_profe = Profesor(nombre, apellido, mail, password, titulo, anio_egreso)
@@ -353,5 +374,14 @@ def ver_profesores():
 def pause():
     print("Presione cualquier tecla para continuar...")
     msvcrt.getch().strip()    
+
+def validar_email(email):
+    # Patrón de expresión regular para validar un correo electrónico
+    patron_email = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     
+    if re.match(patron_email, email):
+        return True
+    else:
+        return False
+
 menu_principal()
