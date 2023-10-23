@@ -328,16 +328,25 @@ def ingresar_como_profesor(email):
 def dictar_curso(profesor):
     os.system ("cls")
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
-    contrasenia_matriculacion = Curso.generar_password(nombre_curso)
-    confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
-    if confirmacion == "si":
-        curso = Curso(nombre_curso, contrasenia_matriculacion)
-        lista_cursos.append(curso)
-        profesor.mi_cursos.append(curso)
-        print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}")
-        pause()
+    if validar_curso(nombre_curso.title(), lista_cursos):
+        contrasenia_matriculacion = Curso.generar_password(nombre_curso)
+        confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
+        if confirmacion == "si":
+            curso = Curso(nombre_curso, contrasenia_matriculacion)
+            lista_cursos.append(curso)
+            profesor.mi_cursos.append(curso)
+            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}")
+            pause()
+        else:
+            print("Se canceló la operación.")        
     else:
-        print("Se canceló la operación.")
+        print("Ya existe un curso con ese nombre. Operación cancelada.")
+
+def validar_curso(nombre, lista_cursos):
+    for curso in lista_cursos:
+        if nombre == curso.nombre:
+            return False  # El nombre ya está en la lista
+    return True  # El nombre no está en la lista
 
 def ver_cursos_dictados(profesor):
     os.system ("cls")
