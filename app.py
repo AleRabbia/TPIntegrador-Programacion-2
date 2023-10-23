@@ -128,7 +128,6 @@ def informes():
 
 #funcion para ingresar como alumno, pide mail, si no existe permite dar de alta un nuevo alumno
 def ingresar_como_alumno(email): 
-    os.system ("cls")
     for estudiante in lista_estudiantes:
         if estudiante.mail == email:
             password = getpass.getpass("Ingrese su contraseña: ")
@@ -137,6 +136,7 @@ def ingresar_como_alumno(email):
                 return
             else:
                 print("Contraseña incorrecta. Por favor, inténtelo de nuevo.")
+                ingresar_como_alumno(email)
                 return
     confirmacion = input("No se encontró un estudiante con ese email. ¿Desea darlo de alta? (si/no): ").lower()
     if confirmacion == "si":
@@ -179,7 +179,7 @@ def matricularse_a_curso(estudiante):
 def desmatricularse_a_curso(estudiante):
     os.system("cls")
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
-    ver_cursos(lista_cursos)
+    ver_cursos_matriculados(estudiante)
     opcion = input("Seleccione el número del curso al que desea matricularse: ")
     if opcion.isdigit():
         curso_index = int(opcion) - 1
@@ -307,7 +307,6 @@ def cambiar_contraseña(user):
         print("Contraseña incorrecta. No se realizaron cambios.")
 
 def ingresar_como_profesor(email):
-    os.system ("cls")
     for profesor in lista_profesores:
         if profesor.mail == email:
             password = getpass.getpass("Ingrese su contraseña: ")
@@ -316,6 +315,7 @@ def ingresar_como_profesor(email):
                 return
             else:
                 print("Contraseña incorrecta. Por favor, inténtelo de nuevo.")
+                ingresar_como_profesor(email)
                 return
     confirmacion = input("No se encontró un profesor con ese email. ¿Desea darlo de alta en alumnado? (si/no): ").lower()
     if confirmacion == "si":
