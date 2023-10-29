@@ -2,9 +2,9 @@ from datetime import *
 
 
 class Archivo:
-    def __init__(self, nombre: str, fecha: date, formato: str) -> None:
+    def __init__(self, nombre:str, formato: str) -> None:
         self.__nombre = nombre
-        self.__fecha = fecha
+        self.__fecha = datetime.now().date()
         self.__formato = formato
     
     @property
@@ -18,10 +18,6 @@ class Archivo:
     @property
     def fecha(self):
         return self.__fecha
-
-    @fecha.setter
-    def fecha(self, nueva_fecha):
-        self.__fecha = nueva_fecha
 
     @property
     def formato(self):

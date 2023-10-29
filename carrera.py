@@ -3,7 +3,7 @@ class Carrera:
     def __init__(self, nombre: str, cant_anios: int) -> None:
         self.__nombre = nombre
         self.__cant_anios = cant_anios
-        #self.__cursos_carrera = []
+        self.__cursos_carrera = []
     
     @property
     def nombre(self):
@@ -24,5 +24,5 @@ class Carrera:
     def __str__(self) -> str:
         return f'Nombre de carrera: {self.carrera}, cantidad de años: {self.cant_anios}'
     
-    #def get_cantidad_materias(self):
-    #    return len(self.__cursos_carrera)  NO SE SI SERÍA ASÍ LA FORMA DE HACERLO
+    def get_cantidad_materias(self):
+        return len(self.__cursos_carrera)

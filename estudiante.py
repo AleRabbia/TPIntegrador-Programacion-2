@@ -3,12 +3,13 @@ from curso import *
 import datetime 
 
 class Estudiante(Usuario):
-    def __init__(self, nombre: str, apellido: str, mail: str, password: str, legajo: int, anio_inscripcion_carrera: int) -> None:
+    def __init__(self, nombre: str, apellido: str, mail: str, password: str, legajo: int, anio_inscripcion_carrera: int, carrera: str) -> None:
         super().__init__(nombre, apellido, mail, password)
         self.__legajo = legajo
         self.__anio_inscripcion_carrera = anio_inscripcion_carrera
         Usuario.usuarios_registrados.append({"mail": self.mail, "password": self.password, "tipo": "estudiante"})
         self.__mi_cursos = []
+        self.__carrera = carrera
 
 
     @property
@@ -69,9 +70,9 @@ class Estudiante(Usuario):
 
         
 # Crear instancias de estudiantes
-estudiante1 = Estudiante("Ale", "Rabbia", "ale@g.com", "1234", 1001, 2020)
-estudiante2 = Estudiante("Marcelo", "Cepeda", "marce@g.com", "abc123", 1002, 2019)
-estudiante3 = Estudiante("Matias", "Volpe", "mvolpe@g.com", "qwerty", 1003, 2021)
+estudiante1 = Estudiante("Ale", "Rabbia", "ale@g.com", "1234", 1001, 2020, "Ingenieria civil")
+estudiante2 = Estudiante("Marcelo", "Cepeda", "marce@g.com", "abc123", 1002, 2019, "Tecnicatura Universitaria en programacion")
+estudiante3 = Estudiante("Matias", "Volpe", "mvolpe@g.com", "qwerty", 1003, 2021, "Ingenieía mecánica")
 
 # Crear la lista de estudiantes
 lista_estudiantes = [estudiante1, estudiante2, estudiante3]

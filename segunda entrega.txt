@@ -1,0 +1,18 @@
+- Si el profesor no existe puede darse de alta ingresando el código admin para acceder al alta del
+profesor. Luego de cargar los datos el mismo se agrega a los profesores dados de alta y se
+regresa al menú principal.
+
+- En el listado de cursos hay que agregar también la carrera
+
+- Opción de desmatricularse (listo)
+
+- Al matricularse, se valida que el alumno pertenezca a la carrera a la que dicho
+curso pertenece y que la contraseña de matriculación ingresada sea la del curso
+
+- En submenu alumno, opción de mostrar los cursos a los que está matriculado, y al seleccionar uno de
+esos cursos, que muestre los archivos que hay en ese curso
+
+- En ver_cursos_dictados, mostrar primero una lista de los cursos y permitir seleccionar uno, 
+cuando el usuario elija uno de la lista, mostrar nombre, contraseña, el código del curso y la cantidad de archivos.
+Además, después de mostrar el curso seleccionado preguntar si desea agregar un archivo al curso.
+
