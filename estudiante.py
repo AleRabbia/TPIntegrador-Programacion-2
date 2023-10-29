@@ -31,9 +31,17 @@ class Estudiante(Usuario):
     @anio_inscripcion_carrera.setter
     def anio_inscripcion_carrera(self, nuevo_anio_inscripcion: int):
         self.__anio_inscripcion_carrera = nuevo_anio_inscripcion
+    
+    @property
+    def carrera(self) -> int:
+        return self.__carrera
+
+    @carrera.setter
+    def carrera(self, nueva_carrera: int):
+        self.__carrera = nueva_carrera
 
     def __str__(self) -> str:
-        return f"Alumno: {self.nombre} {self.apellido}, Legajo: {self.legajo}, Año de inscripcion: {self.anio_inscripcion_carrera}"
+        return f"Alumno: {self.nombre} {self.apellido}, Legajo: {self.legajo}, Carrera: {self.carrera} - Año de inscripcion: {self.anio_inscripcion_carrera}"
 
     def matricularse_al_curso(self, curso: Curso, contrasenia: str) -> str:
 
@@ -63,6 +71,7 @@ class Estudiante(Usuario):
         resumen += f"Nombre: {self.nombre}\n"
         resumen += f"Apellido: {self.apellido}\n"
         resumen += f"Legajo: {self.legajo}\n"
+        resumen += f"Carrera: {self.carrera}\n"
         resumen += f"Año de Inscripción: {self.anio_inscripcion_carrera}\n"
         resumen += "*" * 50
         return resumen

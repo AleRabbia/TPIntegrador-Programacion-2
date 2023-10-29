@@ -1,1 +1,0 @@
-print("6 - Volver al menú principal")

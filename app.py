@@ -1,10 +1,14 @@
 from curso import *
 from estudiante import *
 from profesor import *
+from carrera import *
 import msvcrt
 import os
 import getpass
 import re
+from archivo import *
+
+codigo_admin = "admin"
 
 menucito = '''
 \n *** Menu Principal ***
@@ -138,7 +142,7 @@ def ingresar_como_alumno(email):
                 print("Contraseña incorrecta. Por favor, inténtelo de nuevo.")
                 ingresar_como_alumno(email)
                 return
-    confirmacion = input("No se encontró un estudiante con ese email. ¿Desea darlo de alta? (si/no): ").lower()
+    confirmacion = input("No se encontró un estudiante con ese email. ¿Desea darlo de alta en Alumnado? (si/no): ").lower()
     if confirmacion == "si":
         alta_alumno(email)
     else:
@@ -160,8 +164,10 @@ def ver_cursos_matriculados(estudiante):
 
 def matricularse_a_curso(estudiante):
     os.system ("cls")
-    lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
-    ver_cursos(lista_cursos)
+    cursos_filtrados = [curso for curso in lista_cursos if curso.carrera == estudiante.carrera] 
+    #ya validamos que sean los cursos de la carrera a la cual pertenece el alumno
+    lista_cursos_ordenados = sorted(cursos_filtrados, key=lambda cursos: cursos.nombre)
+    ver_cursos(cursos_filtrados)
     #ver_cursos()
     opcion = input("Seleccione el número del curso al que desea matricularse: ")
     if opcion.isdigit():
@@ -217,6 +223,24 @@ def alta_alumno(mail:str):
         except ValueError:
             print("El legajo debe ser un número entero")
             continue
+        
+    print("Carreras disponibles:")
+    for i, carrera in enumerate(lista_carreras, start=1):
+        print(f"{i}. {carrera.nombre}")
+    while True:
+        seleccion = input("Seleccione el número de la carrera: ")
+        try:
+            seleccion = int(seleccion)
+            if 1 <= seleccion <= len(lista_carreras):
+                
+                carrera_elegida = lista_carreras[seleccion - 1]
+                break
+            else:
+                print("Opción no válida. Intente de nuevo.")
+        except ValueError:
+            print("Por favor, ingrese un número válido.")
+
+
     password = getpass.getpass("Ingrese su contraseña: ")
     if not nombre or not apellido or not legajo or not password:
         print("Todos los campos deben estar completos. Operación cancelada.")
@@ -225,7 +249,7 @@ def alta_alumno(mail:str):
     fecha_inscripcion = fecha_actual.year
     confirmacion = input("¿Confirma el alta de usuario? (si/no): ").lower()
     if confirmacion == "si":
-        nuevo_estudiante = Estudiante(nombre, apellido, mail, password, legajo, fecha_inscripcion)
+        nuevo_estudiante = Estudiante(nombre, apellido, mail, password, legajo, fecha_inscripcion, carrera_elegida.nombre)
         lista_estudiantes.append(nuevo_estudiante)
         resumen = nuevo_estudiante.resumen_alumno()
         print(resumen)
@@ -319,20 +343,24 @@ def ingresar_como_profesor(email):
                 return
     confirmacion = input("No se encontró un profesor con ese email. ¿Desea darlo de alta en alumnado? (si/no): ").lower()
     if confirmacion == "si":
-        alta_profesor(email)
-    else:
-        print("Operacion cancelada.")
-        pause()
-        return
+        codigo = input("Ingrese el código de administrador: ")
+        if codigo == codigo_admin:
+            alta_profesor(email)
+            return
+        else:
+            print("Código de administrador incorrecto. Operación cancelada.")
+            return
 
 def dictar_curso(profesor):
     os.system ("cls")
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
-    if validar_curso(nombre_curso.title(), lista_cursos):
+    carrera_curso= input("Ingrese la carrera a la que pertenece el curso: ")
+    if validar_curso(nombre_curso.title(), carrera_curso.title(), lista_cursos):
+        
         contrasenia_matriculacion = Curso.generar_password(nombre_curso)
         confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
         if confirmacion == "si":
-            curso = Curso(nombre_curso, contrasenia_matriculacion)
+            curso = Curso(nombre_curso.title(), contrasenia_matriculacion, carrera_curso.title())
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
             print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}")
@@ -342,9 +370,9 @@ def dictar_curso(profesor):
     else:
         print("Ya existe un curso con ese nombre. Operación cancelada.")
 
-def validar_curso(nombre, lista_cursos):
+def validar_curso(nombre, carrera, lista_cursos):
     for curso in lista_cursos:
-        if nombre == curso.nombre:
+        if nombre == curso.nombre and carrera==curso.carrera:
             return False  # El nombre ya está en la lista
     return True  # El nombre no está en la lista
 
@@ -357,7 +385,28 @@ def ver_cursos_dictados(profesor):
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
-        pause()
+
+        opcion = input("Seleccione el número del curso al que desea matricularse: ")
+        if opcion.isdigit():
+            curso_index = int(opcion) - 1
+            if 0 <= curso_index < len(mi_cursos):
+                curso = mi_cursos[curso_index]
+                confirmacion=input("Desea agregar un archivo (si/no)?")
+                if confirmacion == "si":
+                    nombre_archivo = input("Ingrese el nombre del archivo: ")
+                    formato_archivo = input("Ingrese el formato del archivo: ")
+                    mi_archivo = Archivo(nombre_archivo, formato_archivo)
+                    curso.nuevo_archivo(mi_archivo)
+                    print(f"¡Archivo creado con éxito!\n {mi_archivo}")
+                    pause()
+                else:
+                    print("Se canceló la operación.") 
+                        
+            else:
+                print("Opción inválida. Por favor, ingrese una opción válida.")
+        else:
+            print("Opción inválida. Por favor, ingrese un valor numérico.")
+            pause()
 
 
 def alta_profesor(mail:str):
@@ -419,7 +468,7 @@ def ver_cursos(lista_cursos):
 def ver_alumnos():
     os.system ("cls")
     # Ordenar la lista de estudiantes por apellido
-    lista_estudiantes_ordenados = sorted(lista_estudiantes, key=lambda estudiante: estudiante.apellido)
+    lista_estudiantes_ordenados = sorted(lista_estudiantes, key=lambda estudiante: (estudiante.carrera, estudiante.apellido))
     print("\n*** Todos los Alumnos ***")
     # Imprimir la lista ordenada
     for estudiante in lista_estudiantes_ordenados:

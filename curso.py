@@ -1,8 +1,9 @@
 from usuario import *
 from archivo import Archivo
 
-__prox_cod = 0
+
 class Curso:
+    __prox_cod = 0
     def __init__(self, nombre:str, contrasenia_matriculacion:str, carrera: str) -> None:
         self.__nombre = nombre
         self.__contrasenia_matriculacion = contrasenia_matriculacion
@@ -18,7 +19,13 @@ class Curso:
     @nombre.setter
     def nombre(self, nuevo_nombre:str):
         self.__nombre = nuevo_nombre.title()
+    @property
+    def carrera(self) -> int:
+        return self.__carrera
 
+    @carrera.setter
+    def carrera(self, nueva_carrera: int):
+        self.__carrera = nueva_carrera
     @property
     def contrasenia_matriculacion(self):
         return self.__contrasenia_matriculacion
@@ -28,7 +35,7 @@ class Curso:
         self.__contrasenia_matriculacion = nueva_contrasenia_matriculacion
 
     def __str__(self) -> str:
-        return f"Curso: {self.nombre}"
+        return f"Materia: {self.nombre} - Carrera: {self.carrera}"
     
     @staticmethod
     def generar_password(nombre) -> str:
@@ -43,6 +50,7 @@ class Curso:
     def nuevo_archivo(self, archivo: Archivo) -> None:
         self.__cant_archivos += 1
         self.__archivos.append(archivo)
+        
 
 
 
