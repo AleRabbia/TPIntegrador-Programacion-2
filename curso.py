@@ -16,6 +16,10 @@ class Curso:
     def nombre(self):
         return self.__nombre.title()
     
+    @property
+    def archivo(self):
+        return self.__archivos
+    
     @nombre.setter
     def nombre(self, nuevo_nombre:str):
         self.__nombre = nuevo_nombre.title()

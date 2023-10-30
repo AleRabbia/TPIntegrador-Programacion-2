@@ -160,6 +160,22 @@ def ver_cursos_matriculados(estudiante):
         print("\n*** Cursos Matriculados ***")
         for i, curso in enumerate(estudiante.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}")
+        opcion = input("Seleccione el número del curso si desea ver los archivos: ")
+        if opcion.isdigit():
+            curso_index = int(opcion) - 1
+            if 0 <= curso_index < len(estudiante.mi_cursos):
+                curso = estudiante.mi_cursos[curso_index]
+                if not curso.archivo:
+                    print(f"Aún no hay archivos cargados en el curso {curso.nombre}")
+                else:
+                    print(f"Archivos disponibles en curso {curso.nombre}")
+                    for archivo in curso.archivo:
+                        print(archivo)
+            else:
+                print("Opción inválida. Por favor, ingrese una opción válida.")
+        else:
+            print("Opción inválida. Por favor, ingrese un número válido.")
+
         pause()
         return
 
@@ -169,7 +185,6 @@ def matricularse_a_curso(estudiante):
     #ya validamos que sean los cursos de la carrera a la cual pertenece el alumno
     lista_cursos_ordenados = sorted(cursos_filtrados, key=lambda cursos: cursos.nombre)
     ver_cursos(cursos_filtrados)
-    #ver_cursos()
     opcion = input("Seleccione el número del curso al que desea matricularse: ")
     if opcion.isdigit():
         curso_index = int(opcion) - 1
@@ -188,10 +203,11 @@ def desmatricularse_a_curso(estudiante):
     os.system("cls")
     cursos_filtrados = [curso for curso in estudiante.mi_cursos if curso.carrera == estudiante.carrera]
     lista_cursos_ordenados = sorted(cursos_filtrados, key=lambda cursos: cursos.nombre)
-    print("\n*** Cursos Matriculados ***")
+    
     if not lista_cursos_ordenados:
         print("No estás matriculado en ningún curso aún.")
-    else:    
+    else: 
+        print("\n*** Cursos Matriculados ***")   
         for i, curso in enumerate(lista_cursos_ordenados, start=1):
             print(f"{i}. {curso.nombre}")
         opcion = input("Seleccione el número del curso al que desea matricularse: ")
@@ -375,12 +391,12 @@ def dictar_curso(profesor):
     if validar_curso(nombre_curso, carrera, lista_cursos):
         
         contrasenia_matriculacion = Curso.generar_password(nombre_curso)
-        confirmacion = input(f"Confirma el curso {nombre_curso} ? (si/no): ").lower()
+        confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
         if confirmacion == "si":
-            curso = Curso(nombre_curso, contrasenia_matriculacion, carrera.nombre)
+            curso = Curso(nombre_curso.title(), contrasenia_matriculacion, carrera.nombre)
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
-            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}\nCarrera: {carrera.nombre}")
+            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}\nCarrera: {carrera.nombre}")
             pause()
         else:
             print("Se canceló la operación.")        
@@ -412,7 +428,7 @@ def ver_cursos_dictados(profesor):
                 if confirmacion == "si":
                     nombre_archivo = input("Ingrese el nombre del archivo: ")
                     formato_archivo = input("Ingrese el formato del archivo: ")
-                    mi_archivo = Archivo(nombre_archivo, formato_archivo)
+                    mi_archivo = Archivo(nombre_archivo.title(), formato_archivo.title())
                     curso.nuevo_archivo(mi_archivo)
                     print(f"¡Archivo creado con éxito!\n {mi_archivo}")
                     pause()
