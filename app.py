@@ -344,7 +344,7 @@ def ingresar_como_profesor(email):
                 return
     confirmacion = input("No se encontró un profesor con ese email. ¿Desea darlo de alta en alumnado? (si/no): ").lower()
     if confirmacion == "si":
-        codigo = input("Ingrese el código de administrador: ")
+        codigo = getpass.getpass("Ingrese el código de administrador: ")
         if codigo == codigo_admin:
             alta_profesor(email)
             return
