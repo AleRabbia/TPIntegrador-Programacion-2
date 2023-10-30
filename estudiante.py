@@ -81,7 +81,7 @@ class Estudiante(Usuario):
 # Crear instancias de estudiantes
 estudiante1 = Estudiante("Ale", "Rabbia", "ale@g.com", "1234", 1001, 2020, "Ingenieria civil")
 estudiante2 = Estudiante("Marcelo", "Cepeda", "marce@g.com", "abc123", 1002, 2019, "Tecnicatura Universitaria en programacion")
-estudiante3 = Estudiante("Matias", "Volpe", "mvolpe@g.com", "qwerty", 1003, 2021, "Ingenieía mecánica")
+estudiante3 = Estudiante("Matias", "Volpe", "mvolpe@g.com", "qwerty", 1003, 2021, "Ingenieria mecánica")
 
 # Crear la lista de estudiantes
 lista_estudiantes = [estudiante1, estudiante2, estudiante3]

@@ -370,7 +370,7 @@ def dictar_curso(profesor):
         contrasenia_matriculacion = Curso.generar_password(nombre_curso)
         confirmacion = input(f"Confirma el curso {nombre_curso} ? (si/no): ").lower()
         if confirmacion == "si":
-            curso = Curso(nombre_curso, contrasenia_matriculacion, carrera_curso)
+            curso = Curso(nombre_curso, contrasenia_matriculacion, carrera.nombre)
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
             print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}")
