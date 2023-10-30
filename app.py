@@ -7,6 +7,7 @@ import os
 import getpass
 import re
 from archivo import *
+import datetime 
 
 codigo_admin = "admin"
 
@@ -185,19 +186,25 @@ def matricularse_a_curso(estudiante):
 
 def desmatricularse_a_curso(estudiante):
     os.system("cls")
-    lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
-    ver_cursos_matriculados(estudiante)
-    opcion = input("Seleccione el número del curso al que desea matricularse: ")
-    if opcion.isdigit():
-        curso_index = int(opcion) - 1
-        if 0 <= curso_index < len(lista_cursos_ordenados):
-            curso = lista_cursos_ordenados[curso_index]
-            mensaje = estudiante.desmatricularse_al_curso(curso)
-            print(mensaje)
+    cursos_filtrados = [curso for curso in estudiante.mi_cursos if curso.carrera == estudiante.carrera]
+    lista_cursos_ordenados = sorted(cursos_filtrados, key=lambda cursos: cursos.nombre)
+    print("\n*** Cursos Matriculados ***")
+    if not lista_cursos_ordenados:
+        print("No estás matriculado en ningún curso aún.")
+    else:    
+        for i, curso in enumerate(lista_cursos_ordenados, start=1):
+            print(f"{i}. {curso.nombre}")
+        opcion = input("Seleccione el número del curso al que desea matricularse: ")
+        if opcion.isdigit():
+            curso_index = int(opcion) - 1
+            if 0 <= curso_index < len(lista_cursos_ordenados):
+                curso = lista_cursos_ordenados[curso_index]
+                mensaje = estudiante.desmatricularse_al_curso(curso)
+                print(mensaje)
+            else:
+                print("Opción inválida. Por favor, ingrese una opción válida.")
         else:
-            print("Opción inválida. Por favor, ingrese una opción válida.")
-    else:
-        print("Opción inválida. Por favor, ingrese un número válido.")
+            print("Opción inválida. Por favor, ingrese un número válido.")
 
 
 def alta_alumno(mail:str):
@@ -373,7 +380,7 @@ def dictar_curso(profesor):
             curso = Curso(nombre_curso, contrasenia_matriculacion, carrera.nombre)
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
-            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}")
+            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}\nCarrera: {carrera.nombre}")
             pause()
         else:
             print("Se canceló la operación.")        
@@ -394,7 +401,7 @@ def ver_cursos_dictados(profesor):
     else:
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
-            print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
+            print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}\nCarrera: {curso.carrera}")
 
         opcion = input("Seleccione el número del curso si desea agregar un archivo o presione enter para volver al menu anterior: ")
         if opcion.isdigit():
