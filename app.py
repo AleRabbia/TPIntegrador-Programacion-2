@@ -75,6 +75,7 @@ def menu_alumno(estudiante):
         elif opcion == "6":
             print("Volviendo al menú principal.")
             pause()
+            menu_principal()
             break
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
@@ -380,32 +381,38 @@ def dictar_curso(profesor):
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
     for i, carrera in enumerate(lista_carreras, start=1):
             print(f"{i}. {carrera.nombre}")
-    carrera_curso= input("Ingrese la carrera a la que pertenece el curso: ")
-    if carrera_curso.isdigit():
-            carrera_index = int(carrera_curso) - 1
-            if 0 <= carrera_index < len(lista_carreras):
-                carrera = lista_carreras[carrera_index] 
-            else:
-                print("Opción inválida. Por favor, ingrese una opción válida.")
+    carrera_index = -1
+    while(True):
+        carrera_curso= input("Ingrese la carrera a la que pertenece el curso: ")
+        if carrera_curso.isdigit():
+                carrera_index = int(carrera_curso) - 1
+                if 0 <= carrera_index < len(lista_carreras):
+                    carrera = lista_carreras[carrera_index] 
+                    break
+                else:
+                    print("Opción inválida. Por favor, ingrese una opción válida.")
+        if carrera_index == -1:
+            print("No se seleccionó una carrera.")
+
             
-    if validar_curso(nombre_curso, carrera, lista_cursos):
+    if validar_curso(nombre_curso, carrera.nombre, lista_cursos):
         
         contrasenia_matriculacion = Curso.generar_password(nombre_curso)
-        confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
+        confirmacion = input(f"Confirma el curso {nombre_curso} ? (si/no): ").lower()
         if confirmacion == "si":
-            curso = Curso(nombre_curso.title(), contrasenia_matriculacion, carrera.nombre)
+            curso = Curso(nombre_curso, contrasenia_matriculacion, carrera.nombre)
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
-            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}\nCarrera: {carrera.nombre}")
+            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}\nCarrera: {carrera.nombre}")
             pause()
         else:
             print("Se canceló la operación.")        
     else:
         print("Ya existe un curso con ese nombre. Operación cancelada.")
 
-def validar_curso(nombre, carrera, lista_cursos):
+def validar_curso(nombre_curso, carrera, lista_cursos):
     for curso in lista_cursos:
-        if nombre == curso.nombre and carrera==curso.carrera:
+        if nombre_curso == curso.nombre and carrera==curso.carrera:
             return False  # El nombre ya está en la lista
     return True  # El nombre no está en la lista
 
