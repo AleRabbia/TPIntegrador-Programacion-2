@@ -21,11 +21,11 @@ class Archivo:
 
     @property
     def formato(self):
-        return self.__fecha
+        return self.__formato
     
     @formato.setter
     def formato(self, nuevo_formato):
         self.__formato = nuevo_formato
     
     def __str__(self) -> str:
-        return f'Nombre de archivo: {self.nombre}, fecha de creacion: {self.fecha}, formato: {self.fecha}'
+        return f'Nombre de archivo: {self.nombre}, fecha de creacion: {self.fecha}, formato: {self.formato}'

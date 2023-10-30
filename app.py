@@ -176,7 +176,8 @@ def matricularse_a_curso(estudiante):
             curso = lista_cursos_ordenados[curso_index]
             contrasenia = input(f"Ingrese la contraseña de matriculación para el curso {curso.nombre}: ")
             mensaje = estudiante.matricularse_al_curso(curso, contrasenia)  #          
-            print(mensaje)       
+            print(mensaje)  
+            pause()     
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
     else:
@@ -354,16 +355,25 @@ def ingresar_como_profesor(email):
 def dictar_curso(profesor):
     os.system ("cls")
     nombre_curso = input("Ingrese el nombre del curso a dictar: ")
+    for i, carrera in enumerate(lista_carreras, start=1):
+            print(f"{i}. {carrera.nombre}")
     carrera_curso= input("Ingrese la carrera a la que pertenece el curso: ")
-    if validar_curso(nombre_curso.title(), carrera_curso.title(), lista_cursos):
+    if carrera_curso.isdigit():
+            carrera_index = int(carrera_curso) - 1
+            if 0 <= carrera_index < len(lista_carreras):
+                carrera = lista_carreras[carrera_index] 
+            else:
+                print("Opción inválida. Por favor, ingrese una opción válida.")
+            
+    if validar_curso(nombre_curso, carrera, lista_cursos):
         
         contrasenia_matriculacion = Curso.generar_password(nombre_curso)
-        confirmacion = input(f"Confirma el curso {nombre_curso.title()} ? (si/no): ").lower()
+        confirmacion = input(f"Confirma el curso {nombre_curso} ? (si/no): ").lower()
         if confirmacion == "si":
-            curso = Curso(nombre_curso.title(), contrasenia_matriculacion, carrera_curso.title())
+            curso = Curso(nombre_curso, contrasenia_matriculacion, carrera_curso)
             lista_cursos.append(curso)
             profesor.mi_cursos.append(curso)
-            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso.title()}\nContraseña: {contrasenia_matriculacion}")
+            print(f"¡Curso dado de alta con éxito!\nNombre: {nombre_curso}\nContraseña: {contrasenia_matriculacion}")
             pause()
         else:
             print("Se canceló la operación.")        
@@ -386,11 +396,11 @@ def ver_cursos_dictados(profesor):
         for i, curso in enumerate(profesor.mi_cursos, start=1):
             print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}")
 
-        opcion = input("Seleccione el número del curso al que desea matricularse: ")
+        opcion = input("Seleccione el número del curso si desea agregar un archivo o presione enter para volver al menu anterior: ")
         if opcion.isdigit():
             curso_index = int(opcion) - 1
-            if 0 <= curso_index < len(mi_cursos):
-                curso = mi_cursos[curso_index]
+            if 0 <= curso_index < len(profesor.mi_cursos):
+                curso = profesor.mi_cursos[curso_index]
                 confirmacion=input("Desea agregar un archivo (si/no)?")
                 if confirmacion == "si":
                     nombre_archivo = input("Ingrese el nombre del archivo: ")
@@ -405,7 +415,7 @@ def ver_cursos_dictados(profesor):
             else:
                 print("Opción inválida. Por favor, ingrese una opción válida.")
         else:
-            print("Opción inválida. Por favor, ingrese un valor numérico.")
+            print("Volviendo al menu anterior.")
             pause()
 
 
