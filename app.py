@@ -424,24 +424,28 @@ def ver_cursos_dictados(profesor):
     else:
         print("\n*** Cursos Dictados ***")
         for i, curso in enumerate(profesor.mi_cursos, start=1):
-            print(f"{i}. {curso.nombre}\nContraseña de Matriculación: {curso.contrasenia_matriculacion}\nCarrera: {curso.carrera}")
-
-        opcion = input("Seleccione el número del curso si desea agregar un archivo o presione enter para volver al menu anterior: ")
+            print(f"{i}. {curso.nombre}")
+            
+        opcion = input("Ingrese numero del curso para ver sus datos presione enter para salir:")
         if opcion.isdigit():
             curso_index = int(opcion) - 1
             if 0 <= curso_index < len(profesor.mi_cursos):
-                curso = profesor.mi_cursos[curso_index]
-                confirmacion=input("Desea agregar un archivo (si/no)?")
-                if confirmacion == "si":
-                    nombre_archivo = input("Ingrese el nombre del archivo: ")
-                    formato_archivo = input("Ingrese el formato del archivo: ")
-                    mi_archivo = Archivo(nombre_archivo.title(), formato_archivo.title())
-                    curso.nuevo_archivo(mi_archivo)
-                    print(f"¡Archivo creado con éxito!\n {mi_archivo}")
-                    pause()
-                else:
-                    print("Se canceló la operación.") 
-                        
+                print(profesor.mi_cursos[curso_index])
+                while True:
+                    confirmacion = input("Desea agregar un archivo (si/no)? ").lower()
+                    if confirmacion == "si":
+                        nombre_archivo = input("Ingrese el nombre del archivo: ")
+                        formato_archivo = input("Ingrese el formato del archivo: ")
+                        mi_archivo = Archivo(nombre_archivo.title(), formato_archivo.title())
+                        curso.nuevo_archivo(mi_archivo)
+                        print(f"¡Archivo creado con éxito!\n {mi_archivo}")
+                        pause()
+                        break 
+                    elif confirmacion == "no":
+                        print("Operación cancelada.")
+                        break
+                    else:
+                        print("Respuesta inválida. Por favor, ingrese 'si' o 'no'.")
             else:
                 print("Opción inválida. Por favor, ingrese una opción válida.")
         else:
@@ -502,7 +506,6 @@ def ver_cursos(lista_cursos):
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
     for i, curso in enumerate(lista_cursos_ordenados, start=1):
         print(f"{i} -", curso)
-    pause()
     #return lista_cursos_ordenados
 
 def ver_alumnos():

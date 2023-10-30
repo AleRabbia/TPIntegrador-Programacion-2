@@ -37,9 +37,18 @@ class Curso:
     @contrasenia_matriculacion.setter
     def contrasenia_matriculacion(self, nueva_contrasenia_matriculacion:str):
         self.__contrasenia_matriculacion = nueva_contrasenia_matriculacion
+        
+    @property
+    def codigo(self):
+        return self.__codigo
+    
+    @property
+    def cant_archivos(self):
+        return self.__cant_archivos
+    
 
     def __str__(self) -> str:
-        return f"Materia: {self.nombre} - Carrera: {self.carrera}"
+        return (f"- Nombre: {self.nombre}\n- Carrera: {self.carrera}\n- Código: {self.__codigo}\n- Contraseña: {self.contrasenia_matriculacion}\n- Cantidad de archivos: {self.cant_archivos} ")
     
     @staticmethod
     def generar_password(nombre) -> str:
