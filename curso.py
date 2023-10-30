@@ -1,6 +1,6 @@
 from usuario import *
 from archivo import Archivo
-
+from datetime import datetime
 
 class Curso:
     __prox_cod = 0
@@ -63,7 +63,11 @@ class Curso:
     def nuevo_archivo(self, archivo: Archivo) -> None:
         self.__cant_archivos += 1
         self.__archivos.append(archivo)
-        
+        archivo.fecha = datetime.now()
+    
+    def ordenar_archivos_por_fecha(self):
+        self.__archivos.sort(key=lambda archivo: archivo.fecha)
+
 
 
 

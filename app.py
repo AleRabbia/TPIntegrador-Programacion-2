@@ -185,14 +185,14 @@ def matricularse_a_curso(estudiante):
     cursos_filtrados = [curso for curso in lista_cursos if curso.carrera == estudiante.carrera] 
     #ya validamos que sean los cursos de la carrera a la cual pertenece el alumno
     lista_cursos_ordenados = sorted(cursos_filtrados, key=lambda cursos: cursos.nombre)
-    ver_cursos(cursos_filtrados)
+    ver_cursos(lista_cursos_ordenados)
     opcion = input("Seleccione el número del curso al que desea matricularse: ")
     if opcion.isdigit():
         curso_index = int(opcion) - 1
         if 0 <= curso_index < len(lista_cursos_ordenados):
             curso = lista_cursos_ordenados[curso_index]
             contrasenia = input(f"Ingrese la contraseña de matriculación para el curso {curso.nombre}: ")
-            mensaje = estudiante.matricularse_al_curso(curso, contrasenia)  #          
+            mensaje = estudiante.matricularse_al_curso(curso, contrasenia)          
             print(mensaje)  
             pause()     
         else:
@@ -505,7 +505,7 @@ def ver_cursos(lista_cursos):
 
     lista_cursos_ordenados = sorted(lista_cursos, key=lambda cursos: cursos.nombre)
     for i, curso in enumerate(lista_cursos_ordenados, start=1):
-        print(f"{i} -", curso)
+        print(f"{i} -", curso.nombre)
     #return lista_cursos_ordenados
 
 def ver_alumnos():

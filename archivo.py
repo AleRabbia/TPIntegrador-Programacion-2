@@ -1,10 +1,10 @@
-from datetime import *
+from datetime import datetime
 
 
 class Archivo:
     def __init__(self, nombre:str, formato: str) -> None:
         self.__nombre = nombre
-        self.__fecha = datetime.now().date()
+        self.__fecha = None
         self.__formato = formato
     
     @property
@@ -19,13 +19,17 @@ class Archivo:
     def fecha(self):
         return self.__fecha
 
+    @fecha.setter
+    def fecha(self, nueva_fecha):
+        self.__fecha = nueva_fecha
+
     @property
     def formato(self):
         return self.__formato
-    
+
     @formato.setter
     def formato(self, nuevo_formato):
         self.__formato = nuevo_formato
     
     def __str__(self) -> str:
-        return f'Nombre de archivo: {self.nombre}, fecha de creacion: {self.fecha}, formato: {self.formato}'
+        return f'Nombre de archivo: {self.nombre}.{self.formato}'
